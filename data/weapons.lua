@@ -8,14 +8,14 @@ return {
 		},
 
 		['WEAPON_APPISTOL'] = {
-			label = 'AP Pistol',
+			label = 'Glock 18c',
 			weight = 1400,
 			durability = 0.1,
 			ammoname = 'ammo-9',
 		},
 
 		['WEAPON_ASSAULTRIFLE'] = {
-			label = 'Assault Rifle',
+			label = 'AK-47',
 			weight = 4500,
 			durability = 0.03,
 			ammoname = 'ammo-rifle2',
@@ -27,7 +27,6 @@ return {
 			durability = 0.03,
 			ammoname = 'ammo-rifle2',
 		},
-
 		['WEAPON_ASSAULTSHOTGUN'] = {
 			label = 'Assault Shotgun',
 			weight = 5200,
@@ -55,7 +54,7 @@ return {
 		},
 
 		['WEAPON_BATTLEAXE'] = {
-			label = 'Battle Axe',
+			label = 'Diamond Sword',
 			weight = 6500,
 			durability = 0.1,
 		},
@@ -94,17 +93,17 @@ return {
 		},
 
 		['WEAPON_CARBINERIFLE'] = {
-			label = 'Carbine Rifle',
+			label = 'M4A1 Service Rifle',
 			weight = 3100,
 			durability = 0.03,
 			ammoname = 'ammo-rifle'
 		},
 
 		['WEAPON_CARBINERIFLE_MK2'] = {
-			label = 'Carbine Rifle MK2',
+			label = 'SIG MPX',
 			weight = 3000,
 			durability = 0.03,
-			ammoname = 'ammo-rifle'
+			ammoname = 'ammo-9'
 		},
 
 		['WEAPON_CERAMICPISTOL'] = {
@@ -143,7 +142,7 @@ return {
 		},
 
 		['WEAPON_COMBATPISTOL'] = {
-			label = 'Combat Pistol',
+			label = 'Glock 17 Service Pistol',
 			weight = 785,
 			durability = 0.2,
 			ammoname = 'ammo-9'
@@ -164,7 +163,7 @@ return {
 		},
 
 		['WEAPON_COMPACTRIFLE'] = {
-			label = 'Compact Rifle',
+			label = 'Draco',
 			weight = 3600,
 			durability = 0.05,
 			ammoname = 'ammo-rifle2'
@@ -190,10 +189,10 @@ return {
 		},
 
 		['WEAPON_DOUBLEACTION'] = {
-			label = 'Double Action Revolver',
+			label = 'Python',
 			weight = 940,
 			durability = 0.2,
-			ammoname = 'ammo-38'
+			ammoname = 'ammo-45'
 		},
 
 		['WEAPON_EMPLAUNCHER'] = {
@@ -254,14 +253,14 @@ return {
 		},
 
 		['WEAPON_GUSENBERG'] = {
-			label = 'Gusenberg',
+			label = 'Thompson',
 			weight = 4900,
 			durability = 0.04,
 			ammoname = 'ammo-45'
 		},
 
 		['WEAPON_HAMMER'] = {
-			label = 'Hammer',
+			label = 'Purple Dildo',
 			weight = 1200,
 			durability = 0.1,
 		},
@@ -302,7 +301,7 @@ return {
 		},
 
 		['WEAPON_HEAVYPISTOL'] = {
-			label = 'Heavy Pistol',
+			label = 'M1911',
 			weight = 1100,
 			durability = 0.2,
 			ammoname = 'ammo-45'
@@ -348,7 +347,7 @@ return {
 		},
 
 		['WEAPON_MACHINEPISTOL'] = {
-			label = 'Machine Pistol',
+			label = 'Tec-9',
 			weight = 1400,
 			durability = 0.05,
 			ammoname = 'ammo-9'
@@ -390,7 +389,7 @@ return {
 		},
 
 		['WEAPON_MICROSMG'] = {
-			label = 'Micro SMG',
+			label = 'MAC-10',
 			weight = 3000,
 			durability = 0.1,
 			ammoname = 'ammo-45'
@@ -455,7 +454,7 @@ return {
 		},
 
 		['WEAPON_PISTOL'] = {
-			label = 'Pistol',
+			label = 'Walther P99',
 			weight = 1130,
 			durability = 0.1,
 			ammoname = 'ammo-9',
@@ -494,7 +493,7 @@ return {
 		},
 
 		['WEAPON_PUMPSHOTGUN'] = {
-			label = 'Pump Shotgun',
+			label = 'Mossberg 590',
 			weight = 3400,
 			durability = 0.1,
 			ammoname = 'ammo-shotgun'
@@ -549,9 +548,9 @@ return {
 		},
 
 		['WEAPON_RPG'] = {
-			label = 'RPG',
+			label = 'RPG-7',
 			weight = 5000,
-			durability = 0.3,
+			durability = 15.0,
 			ammoname = 'ammo-rocket'
 		},
 
@@ -563,9 +562,9 @@ return {
 		},
 
 		['WEAPON_SMG'] = {
-			label = 'SMG',
+			label = 'MP5',
 			weight = 3084,
-			durability = 0.8,
+			durability = 0.1,
 			ammoname = 'ammo-9'
 		},
 
@@ -596,10 +595,10 @@ return {
 		},
 
 		['WEAPON_SNSPISTOL'] = {
-			label = 'SNS Pistol',
+			label = 'Ruger LC9',
 			weight = 465,
 			durability = 0.1,
-			ammoname = 'ammo-45'
+			ammoname = 'ammo-9'
 		},
 
 		['WEAPON_SNSPISTOL_MK2'] = {
@@ -636,7 +635,7 @@ return {
 		},
 
 		['WEAPON_STUNGUN'] = {
-			label = 'Tazer',
+			label = 'Taser',
 			weight = 227,
 			durability = 0.1,
 		},
@@ -714,7 +713,7 @@ return {
 		},
 
 		['at_suppressor_light'] = {
-			label = 'Suppressor',
+			label = 'Lightweight Suppressor',
 			weight = 280,
 			type = 'muzzle',
 			client = {
@@ -1704,7 +1703,7 @@ return {
 
 		['ammo-rocket'] = {
 			label = 'Rocket',
-			weight = 500,
+			weight = 2000,
 		},
 
 		['ammo-shotgun'] = {

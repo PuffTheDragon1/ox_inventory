@@ -32,7 +32,7 @@ return {
 		[`prototipo`] = 1,
 		[`zentorno`] = 1,
 		[`trophytruck`] = 0,
-		[`trophytruck2`] = 0,
+		[`trophytruck2`] = 0
 	},
 
 	-- slots, maxWeight; default weight is 8000 per slot
@@ -53,7 +53,7 @@ return {
 		[14] = {31, 248000},	-- Boat
 		[15] = {31, 248000},	-- Helicopter
 		[16] = {51, 408000},	-- Plane
-		[17] = {11, 88000},		-- Service
+		[17] = {0, 88000},		-- Service
 		[18] = {11, 88000},		-- Emergency
 		[19] = {11, 88000},		-- Military
 		[20] = {11, 88000},		-- Commercial (trucks)

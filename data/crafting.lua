@@ -2,33 +2,53 @@ return {
 	{
 		items = {
 			{
-				name = 'lockpick',
+				name = 'souramnesia_bho',
 				ingredients = {
-					scrapmetal = 5,
-					WEAPON_HAMMER = 0.05
+					butane = 1,
+					weed_amnesia = 5
 				},
 				duration = 5000,
-				count = 2,
+				count = 3,
 			},
+			{
+				name = 'ogkush_bho',
+				ingredients = {
+					butane = 1,
+					weed_ogkush = 5
+				},
+				duration = 5000,
+				count = 3,
+			},
+			{
+				name = 'blueberrykush_bho',
+				ingredients = {
+					butane = 1,
+					weed_blueberrykush = 5
+				},
+				duration = 5000,
+				count = 3,
+			},
+			{
+				name = 'lemonhaze_bho',
+				ingredients = {
+					butane = 1,
+					weed_lemonhaze = 5
+				},
+				duration = 5000,
+				count = 3,
+			},												
 		},
 		points = {
-			vec3(-1147.083008, -2002.662109, 13.180260),
-			vec3(-345.374969, -130.687088, 39.009613)
+
+			vector3(-1170.89, -1572.29, 5.23),
 		},
-		zones = {
-			{
-				coords = vec3(-1146.2, -2002.05, 13.2),
-				size = vec3(3.8, 1.05, 0.15),
-				distance = 1.5,
-				rotation = 315.0,
-			},
-			{
-				coords = vec3(-346.1, -130.45, 39.0),
-				size = vec3(3.8, 1.05, 0.15),
-				distance = 1.5,
-				rotation = 70.0,
-			},
-		},
-		blip = { id = 566, colour = 31, scale = 0.8 },
+		    zones = {
+        {
+            coords = vec3(-1170.89, -1572.29, 5.13),
+            size = vec3(3.8, 1.05, 0.15),
+            distance = 5.5,
+            rotation = 315.0,
+        },
 	},
+  }
 }
