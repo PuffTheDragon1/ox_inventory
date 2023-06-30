@@ -163,8 +163,13 @@ local function comma_value(n)
 	return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
 end
 
-local function canAffordItem(inv, currency, price)
-	local canAfford = price >= 0 and Inventory.GetItem(inv, currency, false, true) >= price
+local function canAffordItem(inv, currency, price, source)
+	local canAffordBank = false
+	if currency == 'money' then
+		canAffordBank = QBCore.Functions.GetPlayer(source).PlayerData.money.bank >= price
+	end
+
+	local canAfford = price >= 0 and (canAffordBank or (Inventory.GetItem(inv, currency, false, true) >= price))
 
 	return canAfford or {
 		type = 'error',
@@ -173,6 +178,20 @@ local function canAffordItem(inv, currency, price)
 end
 
 local function removeCurrency(inv, currency, price)
+local function removeCurrency(inv, currency, price, source, label, count)
+	local canAffordBank = false
+	if currency == 'money' then
+		local Player = QBCore.Functions.GetPlayer(source)
+		canAffordBank = Player.PlayerData.money.bank >= price
+		if canAffordBank and Inventory.HasItem('visa', 1) then
+			Player.Functions.RemoveMoney('bank', price, 'Purchased: ' .. count .. "x " .. label)
+			return
+		elseif canAffordBank and Inventory.HasItem('mastercard', 1) then
+			Player.Functions.RemoveMoney('bank', price, 'Purchased: ' .. count .. "x " .. label)
+			return			
+		end
+	end
+
 	Inventory.RemoveItem(inv, currency, price)
 end
 
