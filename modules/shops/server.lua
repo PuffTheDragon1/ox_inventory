@@ -1,3 +1,4 @@
+local QBCore = exports['qb-core']:GetCoreObject()
 if not lib then return end
 
 local Items = require 'modules.items.server'
@@ -164,7 +165,13 @@ local function comma_value(n)
 end
 
 local function canAffordItem(inv, currency, price)
-	local canAfford = price >= 0 and Inventory.GetItem(inv, currency, false, true) >= price
+	local canAffordBank = false
+	local src = inv.id
+	local Info = QBCore.Functions.GetPlayer(src)
+	if currency == 'money' then
+		canAffordBank = Info.PlayerData.money.bank >= price
+	end
+	local canAfford = price >= 0 and (canAffordBank or (Inventory.GetItem(inv, currency, false, true) >= price))
 
 	return canAfford or {
 		type = 'error',
@@ -172,8 +179,29 @@ local function canAffordItem(inv, currency, price)
 	}
 end
 
-local function removeCurrency(inv, currency, price)
-	Inventory.RemoveItem(inv, currency, price)
+local function removeCurrency(inv, currency, price, count)
+	local src = inv.id
+	local canAfford = price >= 0 and (canAffordBank or (Inventory.GetItem(inv, currency, false, true) >= price))
+	local canAffordBank = false
+	local Info = QBCore.Functions.GetPlayer(src)
+	local hasMastercard = Inventory.GetItem(inv, 'mastercard', false, true)
+	local hasVisa = Inventory.GetItem(inv, 'visa', false, true) 
+
+	if currency == 'money' then
+		canAffordBank = Info.PlayerData.money.bank >= price
+		if canAfford == true then
+			Inventory.RemoveItem(inv, currency, price)
+			canAffordBank = false
+		elseif canAffordBank then
+			Info.Functions.RemoveMoney('bank', price, 'General Transcation')
+			return
+		elseif canAffordBank then
+			Info.Functions.RemoveMoney('bank', price, 'General Transaction')
+			return
+		else
+			print('you need money to buy things...')
+		end
+	end
 end
 
 local TriggerEventHooks = require 'modules.hooks.server'
@@ -247,47 +275,92 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 					return false, false, { type = 'error', description = locale('cannot_carry') }
 				end
 
-				local canAfford = canAffordItem(playerInv, currency, price)
 
-				if canAfford ~= true then
+				local src = playerInv.id
+				local canAffordBank = false
+				local Info = QBCore.Functions.GetPlayer(src)
+				local canAfford = canAffordItem(playerInv, currency, price)
+				local hasMastercard = Inventory.GetItem(playerInv, 'mastercard', false, true)
+				local hasVisa = Inventory.GetItem(playerInv, 'visa', false, true) 
+				if canAfford ~= true and hasCard ~= true then
 					return false, false, canAfford
 				end
 
-				if not TriggerEventHooks('buyItem', {
-					source = source,
-					shopType = shopType,
-					shopId = shopId,
-					toInventory = playerInv.id,
-					toSlot = data.toSlot,
-					itemName = fromData.name,
-					metadata = metadata,
-					count = count,
-					price = fromData.price,
-					totalPrice = price,
-					currency = currency,
-				}) then return false end
+				local hasCard = hasVisa >= 1 or hasMastercard >= 1
+				print(hasCard)
 
-				Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)
-				playerInv.weight = newWeight
-				removeCurrency(playerInv, currency, price)
-
-				if fromData.count then
-					shop.items[data.fromSlot].count = fromData.count - count
-				end
-
-				if server.syncInventory then server.syncInventory(playerInv) end
-
-				local message = locale('purchased_for', count, fromItem.label, (currency == 'money' and locale('$') or comma_value(price)), (currency == 'money' and comma_value(price) or ' '..Items(currency).label))
-
-				if server.loglevel > 0 then
-					if server.loglevel > 1 or fromData.price >= 500 then
-						lib.logger(playerInv.owner, 'buyItem', ('"%s" %s'):format(playerInv.label, message:lower()), ('shop:%s'):format(shop.label))
+				print(hasMastercard)
+				print(hasVisa)
+				if hasCard then
+					if not TriggerEventHooks('buyItem', {
+						source = source,
+						shopType = shopType,
+						shopId = shopId,
+						toInventory = playerInv.id,
+						toSlot = data.toSlot,
+						itemName = fromData.name,
+						metadata = metadata,
+						count = count,
+						price = fromData.price,
+						totalPrice = price,
+						currency = currency,
+					}) then return false end
+	
+					Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)
+					playerInv.weight = newWeight
+					removeCurrency(playerInv, currency, price)
+	
+					if fromData.count then
+						shop.items[data.fromSlot].count = fromData.count - count
 					end
+	
+					if server.syncInventory then server.syncInventory(playerInv) end
+	
+					local message = locale('purchased_for', count, fromItem.label, (currency == 'money' and locale('$') or comma_value(price)), (currency == 'money' and comma_value(price) or ' '..Items(currency).label))
+	
+					if server.loglevel > 0 then
+						if server.loglevel > 1 or fromData.price >= 500 then
+							lib.logger(playerInv.owner, 'buyItem', ('"%s" %s'):format(playerInv.label, message:lower()), ('shop:%s'):format(shop.label))
+						end
+					end
+	
+					return true, {data.toSlot, playerInv.items[data.toSlot], shop.items[data.fromSlot].count and shop.items[data.fromSlot], playerInv.weight}, { type = 'success', description = message }
+				elseif canAfford then
+					if not TriggerEventHooks('buyItem', {
+						source = source,
+						shopType = shopType,
+						shopId = shopId,
+						toInventory = playerInv.id,
+						toSlot = data.toSlot,
+						itemName = fromData.name,
+						metadata = metadata,
+						count = count,
+						price = fromData.price,
+						totalPrice = price,
+						currency = currency,
+					}) then return false end
+	
+					Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)
+					playerInv.weight = newWeight
+					removeCurrency(playerInv, currency, price)
+	
+					if fromData.count then
+						shop.items[data.fromSlot].count = fromData.count - count
+					end
+	
+					if server.syncInventory then server.syncInventory(playerInv) end
+	
+					local message = locale('purchased_for', count, fromItem.label, (currency == 'money' and locale('$') or comma_value(price)), (currency == 'money' and comma_value(price) or ' '..Items(currency).label))
+	
+					if server.loglevel > 0 then
+						if server.loglevel > 1 or fromData.price >= 500 then
+							lib.logger(playerInv.owner, 'buyItem', ('"%s" %s'):format(playerInv.label, message:lower()), ('shop:%s'):format(shop.label))
+						end
+					end
+	
+					return true, {data.toSlot, playerInv.items[data.toSlot], shop.items[data.fromSlot].count and shop.items[data.fromSlot], playerInv.weight}, { type = 'success', description = message }
 				end
-
-				return true, {data.toSlot, playerInv.items[data.toSlot], shop.items[data.fromSlot].count and shop.items[data.fromSlot], playerInv.weight}, { type = 'success', description = message }
 			end
-
 			return false, false, { type = 'error', description = locale('unable_stack_items') }
 		end
 	end
