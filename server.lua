@@ -280,7 +280,8 @@ lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, m
 				local ostime = os.time()
 
 				if ostime > durability then
-                    Items.UpdateDurability(inventory, data, item, 0)
+					inventory.items[slot].metadata.durability = 0
+
 					return TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = locale('no_durability', label) })
 				elseif consume ~= 0 and consume < 1 then
 					local degrade = (data.metadata.degrade or item.degrade) * 60
@@ -368,13 +369,19 @@ lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, m
 							local newItem = Inventory.SetSlot(inventory, item, 1, table.deepclone(data.metadata), emptySlot)
 
 							if newItem then
-                                Items.UpdateDurability(inventory, newItem, item, durability)
+								newItem.metadata.durability = durability
+
+								inventory:syncSlotsWithPlayer({
+									{
+										item = newItem,
+									}
+								}, inventory.weight)
 							end
 						end
 
 						durability = 0
 					else
-                        Items.UpdateDurability(inventory, data, item, durability)
+						data.metadata.durability = durability
 					end
 
 					if durability <= 0 then
@@ -386,6 +393,12 @@ lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, m
 					Inventory.RemoveItem(inventory.id, data.name, consume < 1 and 1 or consume, nil, data.slot)
 				else
 					inventory.changed = true
+
+					inventory:syncSlotsWithPlayer({
+						{
+							item = inventory.items[data.slot],
+						}
+					}, inventory.weight)
 
 					if server.syncInventory then server.syncInventory(inventory) end
 				end

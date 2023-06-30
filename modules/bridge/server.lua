@@ -37,7 +37,11 @@ function server.buyLicense()
 	warn('Licenses are not supported for the current framework.')
 end
 
-local Inventory = require 'modules.inventory.server'
+local Inventory
+
+CreateThread(function()
+	Inventory = require 'modules.inventory.server'
+end)
 
 local function playerDropped(source)
 	local inv = Inventory(source) --[[@as OxInventory]]
@@ -49,7 +53,7 @@ local function playerDropped(source)
 			db.savePlayer(inv.owner, json.encode(inv:minimal()))
 		end
 
-		Inventory.Remove(inv)
+		Inventory.Remove(inv, true)
 	end
 end
 
