@@ -309,9 +309,11 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 					Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)
 					playerInv.weight = newWeight
 					removeCurrency(playerInv, currency, price)
-	
-					if fromData.count then
-						shop.items[data.fromSlot].count = fromData.count - count
+					if hascard is true then set hascard false
+				
+						if fromData.count then
+				
+							shop.items[data.fromSlot].count = fromData.count - count
 					end
 	
 					if server.syncInventory then server.syncInventory(playerInv) end
@@ -323,7 +325,7 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 							lib.logger(playerInv.owner, 'buyItem', ('"%s" %s'):format(playerInv.label, message:lower()), ('shop:%s'):format(shop.label))
 						end
 					end
-	
+
 					return true, {data.toSlot, playerInv.items[data.toSlot], shop.items[data.fromSlot].count and shop.items[data.fromSlot], playerInv.weight}, { type = 'success', description = message }
 				elseif canAfford then
 					if not TriggerEventHooks('buyItem', {
