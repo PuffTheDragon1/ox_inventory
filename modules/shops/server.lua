@@ -304,8 +304,8 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 						price = fromData.price,
 						totalPrice = price,
 						currency = currency,
-					}) then return false end
-	
+					}) then return false end 
+					Set hasCard false
 					Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)
 					playerInv.weight = newWeight
 					removeCurrency(playerInv, currency, price)
